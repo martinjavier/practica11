@@ -3,6 +3,7 @@ import createUser from '../utils/users.utils.js';
 export default class UserService{
     constructor() {
         this.users = [];
+        this.lastId = 0;
     }
 
     async createUser(cant=50){
@@ -11,6 +12,7 @@ export default class UserService{
             user.id=i+1;
             this.users.push(user);
         }
+        this.lastId = cant;
         return this.users;
     }
 
@@ -19,6 +21,31 @@ export default class UserService{
             return this.users.filter((user) => user.id===Number(id));
         } else {
             return this.users
+        }
+    }
+
+    async addUser() {
+        const user = createUser();
+        user.id = Number(this.lastId) + 1;
+        this.lastId = user.id;
+        this.users.push(user);
+    }
+
+    async updateUser(id, data) {
+        if (this.users.length===0) throw new Error("No hay data");
+        let index = null;
+        try {
+           let usuario = this.users.filter((user, _index) => {
+               if (user.id === Number(id)) {
+                   index = _index;
+                   return user;
+               }
+           }) [0]
+           // Mezcla el objeto de la izquierda con el objeto de la derecha
+           Object.assign(usuario, data)
+           this.users[index] = usuario
+        } catch (error) {
+            console.log(error)
         }
     }
 

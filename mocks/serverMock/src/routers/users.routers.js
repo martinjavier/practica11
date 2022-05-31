@@ -8,8 +8,8 @@ export default class UserRoute extends express.Router{
 
         this.post('/popular', this.userController.createUser);
         this.get('/', this.userController.getUsers);
-        this.post('/');
-        this.put('/:id');
+        this.post('/', this.userController.addUser);
+        this.put('/:id', this.userController.updateUser);
         this.delete('/:id');
     }
 }
